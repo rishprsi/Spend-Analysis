@@ -33,13 +33,13 @@ struct HomeView: View {
                                 Text(month)
                             }
                         }
-                        .frame(width: 200)
+                        .scaledToFit()
                     }
 
                     Button(action: {
                         showingYearPopover.toggle() // Show year popover
                     }) {
-                        Text("\(viewModel.year(from: viewModel.currentMonth))")
+                        Text(String(viewModel.year(from: viewModel.currentMonth)))
                             .font(.headline)
                     }
                     .popover(isPresented: $showingYearPopover) {
@@ -51,7 +51,7 @@ struct HomeView: View {
                                 Text(String(year))
                             }
                         }
-                        .frame(width: 100)
+                        .scaledToFit()
                     }
 
                     Button(action: {
