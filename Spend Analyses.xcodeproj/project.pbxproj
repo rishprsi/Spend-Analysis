@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EC1B5BF62CCF793F003B2007 /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = EC1B5BF52CCF793F003B2007 /* HorizonCalendar */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		EC1B5ABA2CCDBFB9003B2007 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC1B5BF62CCF793F003B2007 /* HorizonCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = "Spend Analyses";
 			packageProductDependencies = (
+				EC1B5BF52CCF793F003B2007 /* HorizonCalendar */,
 			);
 			productName = "Spend Analyses";
 			productReference = EC1B5AA42CCDBFB7003B2007 /* Spend Analyses.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = EC1B5A9B2CCDBFB7003B2007;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EC1B5BF42CCF793F003B2007 /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC1B5AA52CCDBFB7003B2007 /* Products */;
 			projectDirPath = "";
@@ -552,6 +561,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EC1B5BF42CCF793F003B2007 /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/HorizonCalendar";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EC1B5BF52CCF793F003B2007 /* HorizonCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1B5BF42CCF793F003B2007 /* XCRemoteSwiftPackageReference "HorizonCalendar" */;
+			productName = HorizonCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EC1B5A9C2CCDBFB7003B2007 /* Project object */;
 }

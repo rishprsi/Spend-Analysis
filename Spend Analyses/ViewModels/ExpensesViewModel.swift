@@ -10,6 +10,7 @@ import CoreData
 
 class ExpensesViewModel: ObservableObject {
     @Published var newExpense: Bool = false // Default value
+    
 
     private var context: NSManagedObjectContext
     
@@ -19,7 +20,7 @@ class ExpensesViewModel: ObservableObject {
     }
     
     func fetchExpenses() {
-        let request: NSFetchRequest<Expense> = Expense.fetchRequest();
+        let request: NSFetchRequest<Expense> = Expense.fetchRequest(predicate: NSPredicate(format: "date == false"));
         
         do {
             let expenses = try context.fetch(request)
@@ -29,11 +30,11 @@ class ExpensesViewModel: ObservableObject {
         }
     }
     
-    func toggleNewCategory() {
+    func toggleNewExpense() {
         let request: NSFetchRequest<Expense> = Expense.fetchRequest()
         
         do {
-            let categories = try context.fetch(request)
+            let expenses = try context.fetch(request)
             newExpense = !newExpense
         } catch {
             print("Failed to save expenses: \(error)")

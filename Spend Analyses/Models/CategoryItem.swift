@@ -10,10 +10,16 @@ import SwiftUI
 struct CategoryItem: Identifiable {
     let id = UUID()
     let title: String
-    let amount: Float
-    let view: AnyView // Using AnyView for flexibility
+    let budget: Float
+    let expenses: [ExpenseItem] // Using AnyView for flexibility
     
     static func == (lhs: CategoryItem, rhs: CategoryItem) -> Bool {
             return lhs.id == rhs.id
         }
+    
+    init(){
+        title = ""
+        budget = 0.0
+        expenses = []
+    }
 }
