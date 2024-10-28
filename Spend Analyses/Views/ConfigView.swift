@@ -17,92 +17,164 @@ struct ConfigView: View {
         Form {
             Section(header: Text("Interval Preferences")) {
                 // Picker for selecting budget interval.
-                Picker("Budget Interval", selection: $viewModel.budgetInterval) {
-                    // Define available options for the Picker.
-                    Text("Weekly").tag("Weekly")
-                    Text("Monthly").tag("Monthly")
-                    Text("Annually").tag("Annually")
-                }
-                .pickerStyle(SegmentedPickerStyle()) // Use segmented style for better visuals.
-                .onChange(of: viewModel.budgetInterval) { _ in
-                    // Save changes when the selection changes.
-                    viewModel.saveSettings()
-                }
+                HStack {
+                                    Text("Budget Interval")
+                                    Spacer()
+                                    Menu {
+                                        // Define dropdown options for budget interval
+                                        Button(action: {
+                                            viewModel.budgetInterval = "Weekly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Weekly")
+                                        }
+                                        Button(action: {
+                                            viewModel.budgetInterval = "Monthly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Monthly")
+                                        }
+                                        Button(action: {
+                                            viewModel.budgetInterval = "Annually"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Annually")
+                                        }
+                                    } label: {
+                                        // Display the current selection
+                                        Text(viewModel.budgetInterval)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
                 
-                Picker("Visualization Interval", selection: $viewModel.visualizationInterval) {
-                    // Define available options for the Picker.
-                    Text("Weekly").tag("Weekly")
-                    Text("Monthly").tag("Monthly")
-                    Text("Annually").tag("Annually")
-                }
-                .pickerStyle(SegmentedPickerStyle()) // Use segmented style for better visuals.
-                .onChange(of: viewModel.budgetInterval) { _ in
-                    // Save changes when the selection changes.
-                    viewModel.saveSettings()
-                }
+                HStack {
+                                    Text("Visualization Interval")
+                                    Spacer()
+                                    Menu {
+                                        // Define dropdown options for budget interval
+                                        Button(action: {
+                                            viewModel.visualizationInterval = "Weekly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Weekly")
+                                        }
+                                        Button(action: {
+                                            viewModel.visualizationInterval = "Monthly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Monthly")
+                                        }
+                                        Button(action: {
+                                            viewModel.visualizationInterval = "Annually"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Annually")
+                                        }
+                                    } label: {
+                                        // Display the current selection
+                                        Text(viewModel.visualizationInterval)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
                 
-                Picker("Summary Interval", selection: $viewModel.summaryInterval) {
-                    // Define available options for the Picker.
-                    Text("Weekly").tag("Weekly")
-                    Text("Monthly").tag("Monthly")
-                    Text("Annually").tag("Annually")
-                }
-                .pickerStyle(SegmentedPickerStyle()) // Use segmented style for better visuals.
-                .onChange(of: viewModel.budgetInterval) { _ in
-                    // Save changes when the selection changes.
-                    viewModel.saveSettings()
-                }
+                HStack {
+                                    Text("Summary Interval")
+                                    Spacer()
+                                    Menu {
+                                        // Define dropdown options for budget interval
+                                        Button(action: {
+                                            viewModel.summaryInterval = "Weekly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Weekly")
+                                        }
+                                        Button(action: {
+                                            viewModel.summaryInterval = "Monthly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Monthly")
+                                        }
+                                        Button(action: {
+                                            viewModel.summaryInterval = "Annually"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Annually")
+                                        }
+                                    } label: {
+                                        // Display the current selection
+                                        Text(viewModel.summaryInterval)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
 
-                // Picker for selecting backup interval.
-                Picker("Backup Interval", selection: $viewModel.backupInterval) {
-                    Text("Weekly").tag("Weekly")
-                    Text("Monthly").tag("Monthly")
-                    Text("Annually").tag("Annually")
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: viewModel.backupInterval) { _ in
-                    viewModel.saveSettings()
-                }
-                
-                // Picker for selecting backup type.
-                Picker("Backup Type", selection: $viewModel.backupType) {
-                    Text("Cloud").tag("Cloud")
-                    Text("Local").tag("Local")
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: viewModel.backupType) { _ in
-                    viewModel.saveSettings()
-                }
+
             }
             
             Section(header: Text("Backup Preferences")) {
                 
                 // Picker for selecting backup type.
-                Picker("Backup Type", selection: $viewModel.backupType) {
-                    Text("Cloud").tag("Cloud")
-                    Text("Local").tag("Local")
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: viewModel.backupType) { _ in
-                    viewModel.saveSettings()
-                }
+                HStack {
+                                    Text("Backup Type")
+                                    Spacer()
+                                    Menu {
+                                        // Define dropdown options for budget interval
+                                        Button(action: {
+                                            viewModel.backupType = "Cloud"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Weekly")
+                                        }
+                                        Button(action: {
+                                            viewModel.backupType = "Local"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Monthly")
+                                        }
+                                        
+                                    } label: {
+                                        // Display the current selection
+                                        Text(viewModel.backupType)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
                 
                 // Picker for selecting backup interval.
-                Picker("Backup Interval", selection: $viewModel.backupInterval) {
-                    Text("Weekly").tag("Weekly")
-                    Text("Monthly").tag("Monthly")
-                    Text("Annually").tag("Annually")
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: viewModel.backupInterval) { _ in
-                    viewModel.saveSettings()
-                }
+                HStack {
+                                    Text("Backup Interval")
+                                    Spacer()
+                                    Menu {
+                                        // Define dropdown options for budget interval
+                                        Button(action: {
+                                            viewModel.backupInterval = "Weekly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Weekly")
+                                        }
+                                        Button(action: {
+                                            viewModel.backupInterval = "Monthly"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Monthly")
+                                        }
+                                        Button(action: {
+                                            viewModel.backupInterval = "Annually"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Annually")
+                                        }
+                                    } label: {
+                                        // Display the current selection
+                                        Text(viewModel.backupInterval)
+                                            .foregroundColor(.primary)
+                                    }
+                                }
+
                 
             }
         }
         .navigationTitle("Config") // Set the navigation title.
         .onAppear {
-            viewModel.fetchSettings() // Fetch settings when the view appears.
+            viewModel.fetchConfig() // Fetch settings when the view appears.
         }
     }
 }

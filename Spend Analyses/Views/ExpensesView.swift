@@ -9,6 +9,19 @@ import SwiftUI
 
 struct ExpensesView: View {
     var body: some View {
-        Text("Expenses")
+        VStack{
+            Text("Expenses")
+            Spacer()
+        }
+        .toolbar { // Toolbar to customize the navigation bar
+            ToolbarItem(placement: .navigationBarTrailing) { // Placement of the button
+                Button(action: {
+                    
+                }) {
+                    Image(systemName:"plus") // Button label
+                    
+                }
+            }
+        }
     }
 }

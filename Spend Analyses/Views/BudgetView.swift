@@ -10,6 +10,19 @@ import SwiftUI
 
 struct BudgetView: View {
     var body: some View {
-        Text("Budget")
+        VStack{
+            Text("Budget")
+            Spacer()
+        }
+        .toolbar { // Toolbar to customize the navigation bar
+            ToolbarItem(placement: .navigationBarTrailing) { // Placement of the button
+                Button(action: {
+                    
+                }) {
+                    Image(systemName:"plus") // Button label
+                    
+                }
+            }
+        }
     }
 }

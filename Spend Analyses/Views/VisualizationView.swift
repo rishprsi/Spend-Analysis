@@ -9,6 +9,10 @@ import SwiftUI
 
 struct VisualizationView: View {
     var body: some View {
-        Text("Visualization View")
+        VStack{
+            Text("Visualization")
+            Spacer()
+        }
+        
     }
 }
