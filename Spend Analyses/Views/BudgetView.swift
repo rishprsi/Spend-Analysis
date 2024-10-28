@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct BudgetView: View {
+    @StateObject private var viewModel = BudgetViewModel()
     var body: some View {
         VStack{
             Text("Budget")

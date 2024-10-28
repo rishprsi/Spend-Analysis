@@ -4,6 +4,7 @@
         <attribute name="budget" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="expenses" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Expense" inverseName="category" inverseEntity="Expense"/>
     </entity>
     <entity name="Config" representedClassName="Config" syncable="YES" codeGenerationType="class">
         <attribute name="backupInterval" optional="YES" attributeType="String"/>
@@ -20,7 +21,10 @@
         <attribute name="expenseDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="expenses" inverseEntity="Category"/>
+        <fetchedProperty name="fetchedProperty" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Expense"/>
+        </fetchedProperty>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

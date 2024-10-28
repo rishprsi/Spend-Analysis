@@ -122,13 +122,13 @@ struct ConfigView: View {
                                             viewModel.backupType = "Cloud"
                                             viewModel.saveSettings()
                                         }) {
-                                            Text("Weekly")
+                                            Text("Cloud")
                                         }
                                         Button(action: {
                                             viewModel.backupType = "Local"
                                             viewModel.saveSettings()
                                         }) {
-                                            Text("Monthly")
+                                            Text("Local")
                                         }
                                         
                                     } label: {
