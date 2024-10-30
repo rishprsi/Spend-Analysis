@@ -8,16 +8,26 @@
 import SwiftUI
 
 struct ExpensesView: View {
+    
     @StateObject private var viewModel = ExpensesViewModel()
     var body: some View {
         VStack{
-            Text("Expenses")
-            Spacer()
+            if (viewModel.newExpenseFlag){
+                Form{
+                    Section(header: Text("New Expense")) {
+                        TextField("Title", text: $viewModel.newExpense.title).frame(maxWidth: .infinity)
+                        AutocompleteField(categories: viewModel.categories)
+                        TextField("Amount", value: $viewModel.newExpense.amount, format: .number).frame(maxWidth: .infinity)
+                        TypeAutocompleteField()
+                    }
+                }
+            }
+            Text("List of expenses")
         }
         .toolbar { // Toolbar to customize the navigation bar
             ToolbarItem(placement: .navigationBarTrailing) { // Placement of the button
                 Button(action: {
-                    
+                    viewModel.toggleNewExpense()
                 }) {
                     Image(systemName:"plus") // Button label
                     

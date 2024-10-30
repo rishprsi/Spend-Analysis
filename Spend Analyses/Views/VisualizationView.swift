@@ -10,7 +10,7 @@ import SwiftUI
 struct VisualizationView: View {
     var body: some View {
         VStack{
-            Text("Visualization")
+            Text("Trends")
             Spacer()
         }
         

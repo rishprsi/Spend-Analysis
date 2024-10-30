@@ -15,7 +15,7 @@ class BottomNavViewModel: ObservableObject {
         NavigationItem(title: "Home", icon: "house", view: AnyView(HomeView())),
         NavigationItem(title: "Expenses", icon: "dollarsign.circle", view: AnyView(ExpensesView())),
         NavigationItem(title: "Budget", icon: "chart.pie", view: AnyView(BudgetView())),
-        NavigationItem(title: "Visualization", icon: "chart.line.uptrend.xyaxis", view: AnyView(VisualizationView())),
+        NavigationItem(title: "Visualisation", icon: "chart.line.uptrend.xyaxis", view: AnyView(VisualizationView())),
         NavigationItem(title: "Config", icon: "gear", view: AnyView(ConfigView()))
     ]
     
