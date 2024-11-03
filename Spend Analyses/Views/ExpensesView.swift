@@ -9,15 +9,26 @@ import SwiftUI
 
 struct ExpensesView: View {
     
+    private let quantityFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.locale = Locale.current
+            formatter.numberStyle = .decimal
+        formatter.zeroSymbol = ""
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 3
+            return formatter
+        }()
+    
     @StateObject private var viewModel = ExpensesViewModel()
     var body: some View {
         VStack{
             if (viewModel.newExpenseFlag){
                 Form{
+                    
                     Section(header: Text("New Expense")) {
                         TextField("Title", text: $viewModel.newExpense.title).frame(maxWidth: .infinity)
                         AutocompleteField(categories: viewModel.categories)
-                        TextField("Amount", value: $viewModel.newExpense.amount, format: .number).frame(maxWidth: .infinity)
+                        TextField("Amount", value: $viewModel.newExpense.amount, formatter: quantityFormatter).frame(maxWidth: .infinity)
                         TypeAutocompleteField()
                     }
                 }

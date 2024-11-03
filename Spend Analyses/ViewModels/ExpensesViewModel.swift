@@ -23,6 +23,13 @@ class ExpensesViewModel: ObservableObject {
         context = PersistenceController.shared.container.viewContext
         fetchExpenses()
         fetchCategories()
+        
+        NotificationCenter.default.addObserver(
+                    self,
+                    selector: #selector(saveChanges),
+                    name: UIApplication.willResignActiveNotification,
+                    object: nil
+                )
     }
     
     func fetchCategories() {
@@ -58,4 +65,15 @@ class ExpensesViewModel: ObservableObject {
             print("Failed to save expenses: \(error)")
         }
     }
+    
+    @objc func saveChanges() {
+            if context.hasChanges {
+                do {
+                    try context.save()
+                    print("Changes saved successfully.")
+                } catch {
+                    print("Failed to save changes: \(error)")
+                }
+            }
+        }
 }
