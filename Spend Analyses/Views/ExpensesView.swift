@@ -26,12 +26,25 @@ struct ExpensesView: View {
                 Form{
                     
                     Section(header: Text("New Expense")) {
-                        TextField("Title", text: $viewModel.newExpense.title).frame(maxWidth: .infinity)
+                        TextField("Expense Name", text: $viewModel.newExpense.title).frame(maxWidth: .infinity)
                         AutocompleteField(categories: viewModel.categories)
                         TextField("Amount", value: $viewModel.newExpense.amount, formatter: quantityFormatter).frame(maxWidth: .infinity)
                         TypeAutocompleteField()
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                // Button action here
+                            }) {
+                                Text("Save Expense")
+                                    .foregroundColor(.white) // Text color
+                                    .padding(.vertical , 5)
+                                    .padding(.horizontal , 10)
+                                    .background(Color.blue) // Background color
+                                    .cornerRadius(25) // Rounded corners
+                            }
+                        }.padding(.vertical , 2)
                     }
-                }
+                }.frame(maxHeight:300)
             }
             Text("List of expenses")
         }

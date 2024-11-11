@@ -17,7 +17,7 @@ extension Category {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var title: String?
+    @NSManaged public var title: String
     @NSManaged public var budget: Float
     @NSManaged public var expenses: Set<Expense>?
 
