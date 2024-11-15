@@ -112,7 +112,7 @@ The MVP of this app would constitute:
 # Challenges and Open Questions
 
 Data migration: As the user data is going to be stored locally, there
-has to be a mechanism for the user to export their data to an external
+has to be a mechanism for the user to export their data to an external#
 device or possible cloud in an encrypted format. Will create exportable
 packages, that the user can upload to cloud/external storage.
 
@@ -128,3 +128,10 @@ research available APIs for integration.
 More features: This app is using a limited set of features so need to
 brainstorm on possible avenues of introducing unique features once the
 MVP is done and the app matures.
+
+
+# Optimizing data storage and retreival
+
+As the data has to be retreived on a date basis both in budget section and expenses section:
+Store data with data based indexing and sorting
+Fetch data from storage based on date restrictions

@@ -9,7 +9,9 @@ import Foundation
 import CoreData
 
 class BudgetViewModel: ObservableObject {
-    @Published var newCategory: Bool = false // Default value
+    @Published var newCategoryFlag: Bool = false // Default value
+    @Published var categories: [Category] = [];
+    @Published var newCategory: Category = Category(context: PersistenceController.shared.container.viewContext)
 
     private var context: NSManagedObjectContext
     
@@ -22,7 +24,7 @@ class BudgetViewModel: ObservableObject {
         let request: NSFetchRequest<Category> = Category.fetchRequest();
         
         do {
-            let categories = try context.fetch(request)
+            categories = try context.fetch(request)
             
         } catch {
             print("Failed to fetch categories: \(error)")
@@ -30,11 +32,8 @@ class BudgetViewModel: ObservableObject {
     }
     
     func toggleNewCategory() {
-        let request: NSFetchRequest<Category> = Category.fetchRequest()
-        
         do {
-            let categories = try context.fetch(request)
-            newCategory = !newCategory
+            newCategoryFlag = !newCategoryFlag
         } catch {
             print("Failed to save categories: \(error)")
         }
