@@ -15,6 +15,9 @@ class ExpensesViewModel: ObservableObject {
     @Published var newExpense: Expense = Expense(context: PersistenceController.shared.container.viewContext)
     @Published var expenses: [Expense] = [];
     @Published var categories: [Category] = [];
+    private var currentOffset = 0
+    private let fetchLimit = 40 // Number of items to load per scroll
+
     
 
     private var context: NSManagedObjectContext
@@ -43,17 +46,35 @@ class ExpensesViewModel: ObservableObject {
         }
     }
     
-    func fetchExpenses() {
-        let request: NSFetchRequest<Expense> = Expense.fetchRequest();
+    func addExpense(){
         
-        
-        do {
-            expenses = try context.fetch(request)
-            
-        } catch {
-            print("Failed to fetch expenses: \(error)")
-        }
     }
+    
+    func fetchExpenses(offset: Int = 0, limit: Int? = nil) {
+            let request: NSFetchRequest<Expense> = Expense.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(keyPath: \Expense.expenseDateTime, ascending: false)]
+            request.fetchOffset = offset
+            if let limit = limit {
+                request.fetchLimit = limit
+            }
+
+            do {
+                let newExpenses = try context.fetch(request)
+                if offset == 0 {
+                    expenses = newExpenses
+                } else {
+                    expenses.append(contentsOf: newExpenses)
+                }
+            } catch {
+                print("Failed to fetch expenses: \(error)")
+            }
+        }
+
+        func loadMoreExpenses() {
+            currentOffset += fetchLimit
+            fetchExpenses(offset: currentOffset, limit: fetchLimit)
+        }
+
     
     func toggleNewExpense() {
         let request: NSFetchRequest<Expense> = Expense.fetchRequest()
