@@ -10,6 +10,7 @@ import SwiftUI
 struct AutocompleteField: View {
     @State private var searchText: String = ""
     @State private var filteredCategories: [Category] = []
+    @Binding var selectedCategory: Category?
 
     let categories: [Category]
 
@@ -26,6 +27,7 @@ struct AutocompleteField: View {
                     Text(category.wrappedTitle)
                         .onTapGesture {
                             searchText = category.wrappedTitle
+                            selectedCategory = category
                             filteredCategories = []
                         }
                 }

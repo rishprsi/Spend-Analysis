@@ -23,23 +23,27 @@ struct ConfigView: View {
                                     Menu {
                                         // Define dropdown options for budget interval
                                         Button(action: {
+                                            viewModel.changeBudgets(newInterval: "Daily")
+                                            viewModel.budgetInterval = "Daily"
+                                            viewModel.saveSettings()
+                                        }) {
+                                            Text("Daily")
+                                        }
+                                        Button(action: {
+                                            viewModel.changeBudgets(newInterval: "Weekly" )
                                             viewModel.budgetInterval = "Weekly"
                                             viewModel.saveSettings()
                                         }) {
                                             Text("Weekly")
                                         }
                                         Button(action: {
+                                            viewModel.changeBudgets(newInterval: "Monthly" )
                                             viewModel.budgetInterval = "Monthly"
                                             viewModel.saveSettings()
                                         }) {
                                             Text("Monthly")
                                         }
-                                        Button(action: {
-                                            viewModel.budgetInterval = "Annually"
-                                            viewModel.saveSettings()
-                                        }) {
-                                            Text("Annually")
-                                        }
+                                        
                                     } label: {
                                         // Display the current selection
                                         Text(viewModel.budgetInterval)

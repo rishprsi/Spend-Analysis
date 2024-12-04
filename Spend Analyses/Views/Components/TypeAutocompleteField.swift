@@ -10,6 +10,8 @@ import SwiftUI
 struct TypeAutocompleteField: View {
     @State private var searchText: String = ""
     @State private var filteredTypes: [String] = []
+    
+    @Binding var selectedType: String?;
 
     let types: [String] = ["One Time", "Recurring"]
 
@@ -25,6 +27,7 @@ struct TypeAutocompleteField: View {
                         .onTapGesture {
                             searchText = type
                             filteredTypes = []
+                            selectedType = type
                         }
                 }
                 .frame(maxHeight: 200) // Limit the height of the list
