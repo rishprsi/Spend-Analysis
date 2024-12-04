@@ -11,7 +11,6 @@ class HomeViewModel: ObservableObject {
     @Published var selectedStartDate: Date? // Start date of the selection
     @Published var selectedEndDate: Date?   // End date of the selection
     @Published var currentMonth: Date = Date() // The month being displayed
-    @Published var expenses: [Expense] = []
     @Published var currentMonthExpenses: Float = 0.0
     @Published var selectedRangeExpenses: Float = 0.0
     @Published var totalBudget: Float = 0.0
@@ -22,7 +21,7 @@ class HomeViewModel: ObservableObject {
     init() {
         context = PersistenceController.shared.container.viewContext
         fetchTotalBudget()
-        fetchExpenses()}
+    }
         
     func fetchTotalBudget() {
         let request: NSFetchRequest<Category> = Category.fetchRequest()
@@ -44,29 +43,6 @@ class HomeViewModel: ObservableObject {
             let range = Calendar.current.range(of: .day, in: .month, for: currentMonth) ?? 0..<0
             return Array(range)
         }
-    
-    func fetchExpenses(offset: Int = 0, limit: Int? = nil) {
-        let request: NSFetchRequest<Expense> = Expense.fetchRequest()
-        request.predicate = NSPredicate(format: "id != nil")
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Expense.expenseDateTime, ascending: false)]
-//        request.fetchOffset = offset
-//        if let limit = limit {
-//            request.fetchLimit = limit
-//        }
-
-        do {
-            let newExpenses = try context.fetch(request)
-            let existingExpenseIDs = Set(expenses.map { $0.id }) // Track existing expense IDs
-            let uniqueNewExpenses = newExpenses.filter { !existingExpenseIDs.contains($0.id) } // Filter duplicates
-            if uniqueNewExpenses.count > 0 {
-                print("Fetched the expense: \(uniqueNewExpenses[uniqueNewExpenses.count-1].id) \(uniqueNewExpenses[uniqueNewExpenses.count-1].category?.title)");
-                expenses.append(contentsOf: uniqueNewExpenses)
-            }
-            
-        } catch {
-            print("Failed to fetch expenses: \(error)")
-        }
-    }
 
         var monthName: String {
             let formatter = DateFormatter()
@@ -125,10 +101,9 @@ class HomeViewModel: ObservableObject {
     
     // Total expenses for the current month
         func monthlyExpenses() -> Float {
-            let currMonth = Calendar.current.component(.month, from: currentMonth)
-            return expenses.filter {
-                Calendar.current.component(.month, from: $0.expenseDateTime ?? Date()) == currMonth
-            }
+            let (startDate,endDate) = DateCalculator.getStartAndEndOfMonth(for: currentMonth)!
+            
+            return FetchExpensesBetweenDates.getExpenses(startDate: startDate, endDate: endDate)
             .reduce(0) { $0 + $1.amount }
         }
     
@@ -143,13 +118,6 @@ class HomeViewModel: ObservableObject {
             return totalBudget
         }
     }
-        
-        // Savings (total budget - total spent)
-        func calculateSavings() -> Float {
-            let totalSpent = expenses.reduce(0) { $0 + $1.amount }
-//            let totalBudget = categories.reduce(0) { $0 + $1.budget }
-            return  totalSpent
-        }
     
     func spendingForSelectedRange() -> Float {
         let startDate:Date;
@@ -161,9 +129,8 @@ class HomeViewModel: ObservableObject {
         }
             var endDate = selectedEndDate ?? startDate
         endDate = Calendar.current.date(byAdding: .day, value: 1, to: endDate)!
-            return expenses
-            .filter { ($0.expenseDateTime ?? Date()) >= startDate && ($0.expenseDateTime ?? Date()) <= endDate }
-                .reduce(0) { $0 + $1.amount }
+        
+            return FetchExpensesBetweenDates.getExpenses(startDate: startDate, endDate: endDate).reduce(0) { $0 + $1.amount }
         }
     
     func selectedRangeBudget() -> Float {
@@ -196,17 +163,5 @@ class HomeViewModel: ObservableObject {
                 return formatter.string(from: startDate)
             }        }
 
-        func savingsForSelectedRange() -> Float {
-            // For simplicity, assuming savings is just the inverse of spending
-            let totalSpent = spendingForSelectedRange()
-            let budget:Float = 500.0 // Example static budget, replace with dynamic value if available
-            return max(0, budget - totalSpent)
-        }
-
-        func calculateMonthlySavings() -> Float {
-            let totalSpent = monthlyExpenses()
-            let monthlyBudget:Float = 10000.0 // Example static budget, replace with dynamic value if available
-            return max(0, monthlyBudget - totalSpent)
-        }
 }
 

@@ -24,6 +24,6 @@ struct BottomNavigationBar: View {
             }
         }
         .background(Color.white)
-        .shadow(radius: 2)
+//        .shadow(radius: 2)
     }
 }

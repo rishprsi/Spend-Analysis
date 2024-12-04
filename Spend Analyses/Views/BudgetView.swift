@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct BudgetView: View {
+    
+    
+    
     private let quantityFormatter: NumberFormatter = {
             let formatter = NumberFormatter()
             formatter.locale = Locale.current
@@ -19,6 +22,7 @@ struct BudgetView: View {
             return formatter
         }()
     @StateObject private var viewModel = BudgetViewModel()
+    
     var body: some View {
         VStack{
             if (viewModel.newCategoryFlag){
@@ -52,11 +56,12 @@ struct BudgetView: View {
                 }.frame(maxHeight:210)
                 
             }
-            Spacer()
+            Spacer().background(.primary)
             List {
+                
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Total Budget")
+                        Text("Total \(viewModel.budgetInterval) Budget")
                             .font(.headline)
                         
                         // Display the budget for the category
@@ -70,6 +75,24 @@ struct BudgetView: View {
                         let totalSpent = viewModel.currentExpenses
                             .reduce(0) { $0 + $1.amount } // Sum the amounts
                         Text("Spent: \(totalSpent, specifier: "%.2f")")
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                    }
+                    Spacer()
+                }
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Uncategorized Expenses")
+                            .font(.headline)
+                        
+                        // Calculate and display the total spent
+                        let uncategorizedExpenses = viewModel.currentExpenses
+                            .filter{$0.category == nil}
+                             
+                        Text("Count: \(uncategorizedExpenses.count, specifier: "%d")")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Text("Spent: \(uncategorizedExpenses.reduce(0) { $0 + $1.amount }, specifier: "%.2f")")
                             .font(.subheadline)
                             .foregroundColor(.red)
                     }

@@ -55,26 +55,33 @@ class BudgetViewModel: ObservableObject {
 
         // Determine the start date based on the budgetInterval
         let startDate: Date?
+        let endDate: Date?
         switch budgetInterval {
         case "Weekly":
-            startDate = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))
+            (startDate,endDate) = DateCalculator.getStartAndEndOfWeek(for: now)!
+//            startDate = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))
         case "Monthly":
-            startDate = calendar.date(byAdding: .month, value: -1, to: now)
+            (startDate,endDate) = DateCalculator.getStartAndEndOfMonth(for: now)!
+//            startDate = calendar.date(byAdding: .month, value: -1, to: now)
         case "Daily":
-            startDate = Calendar.current.startOfDay(for: Date())
+            (startDate,endDate) = DateCalculator.getStartAndEndOfDay(for: now)!
+//            startDate = Calendar.current.startOfDay(for: Date())
         default:
             startDate = nil
+            endDate = nil
         }
 
         // Apply date range predicate if startDate is valid
-        if let startDate = startDate {
-            request.predicate = NSPredicate(format: "expenseDateTime >= %@", startDate as NSDate)
-        } else {
-            request.predicate = nil // No filtering if interval is invalid
-        }
+//        if let startDate = startDate {
+//
+////            request.predicate = NSPredicate(format: "expenseDateTime >= %@", startDate as NSDate)
+//        } else {
+//            request.predicate = nil // No filtering if interval is invalid
+//        }
 
         do {
-            return try context.fetch(request)
+            return FetchExpensesBetweenDates.getExpenses(startDate: startDate!, endDate: endDate!);
+//            return try context.fetch(request)
         } catch {
             print("Failed to fetch expenses for \(budgetInterval): \(error)")
             return []
