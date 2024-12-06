@@ -7,14 +7,22 @@
 
 import Foundation
 import CoreData
+import UniformTypeIdentifiers
+import UIKit
 
 class ConfigViewModel: ObservableObject {
     @Published var budgetInterval: String = "Weekly" // Default value
     @Published var visualizationInterval: String = "Weekly" // Default value
     @Published var summaryInterval: String = "Weekly" // Default value
     @Published var backupInterval: String = "Weekly" // Default value
-    @Published var backupType: String = "Cloud" // Default value
+    @Published var backupType: String = "Local" // Default value
     @Published var totalBudget: Float = 0.0
+    @Published var selectedFileURL: URL?
+    @Published var showFilePicker = false
+    @Published var isPermissionDenied = false
+    @Published var showBackupSuccess = false
+    @Published var resultMessage = ""
+    @Published var showOperationResult = false
     
     var categories :[Category] = []
     
@@ -105,5 +113,67 @@ class ConfigViewModel: ObservableObject {
             print("Failed to save settings: \(error)")
         }
     }
+    
+//    func checkPermissionsAndShowPicker() {
+//            let fileManager = FileManager.default
+//            let tempDirectory = fileManager.temporaryDirectory
+//
+//            do {
+//                _ = try fileManager.contentsOfDirectory(atPath: tempDirectory.path)
+//                showFilePicker = true // Permission granted
+//            } catch {
+//                isPermissionDenied = true // Permission denied
+//            }
+//        }
+//
+//        func openSettings() {
+//            if let url = URL(string: UIApplication.openSettingsURLString) {
+//                UIApplication.shared.open(url)
+//            }
+//        }
+    
+    func createAndExportBackup(fileExportManager:FileExportManager) {
+            // Create backup file
+            let backupURL = FileManager.default.temporaryDirectory.appendingPathComponent("CoreDataBackup.enc")
+            let encryptionKey = EncryptionKeyManager.generateKey() // Generate or retrieve your encryption key
+        let backupManager = CoreDataBackupManager(persistentContainer: PersistenceController.shared.container)
+
+            do {
+                // Backup Core Data
+                try backupManager.backupCoreData(to: backupURL, encryptionKey: encryptionKey)
+
+                // Present save dialog to user
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                           let rootVC = windowScene.windows.first?.rootViewController {
+                            fileExportManager.exportEncryptedBackup(fileURL: backupURL, from: rootVC)
+                        }
+                resultMessage = "Encryption Key: \(encryptionKey)"
+            } catch {
+                resultMessage = "Backup failed: \(error.localizedDescription)"
+                fileExportManager.exportCompletionMessage = "Backup failed: \(error.localizedDescription)"
+                showBackupSuccess = true
+            }
+        }
+    func selectBackupFileForRestore(fileExportManager:FileExportManager) {
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let rootVC = windowScene.windows.first?.rootViewController {
+                fileExportManager.onFileSelected = { fileURL in
+                    self.restoreBackup(from: fileURL)
+                }
+                fileExportManager.importEncryptedBackup(from: rootVC)
+            }
+        }
+        
+        private func restoreBackup(from fileURL: URL) {
+            let backupManager = CoreDataBackupManager(persistentContainer: PersistenceController.shared.container)
+            
+            do {
+                try backupManager.restoreCoreData(from: fileURL, encryptionKey: EncryptionKeyManager.generateKey())
+                resultMessage = "Restore successful!"
+            } catch {
+                resultMessage = "Restore failed: \(error.localizedDescription)"
+            }
+            showOperationResult = true
+        }
 }
 

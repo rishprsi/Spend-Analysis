@@ -64,31 +64,7 @@ struct ExpensesView: View {
 
 //                            Text("Selected: \(viewModel.newExpense.wrappedExpenseDateTime, formatter: dateFormatter)")
                                     }.multilineTextAlignment(.trailing)
-//                        HStack{
-//                            Text("Type").foregroundColor(.secondary)
-//                            Spacer()
-//                            Menu {
-//                                // Define dropdown options for budget interval
-//                                ForEach(["One Time","Recurring"], id: \.self){ type in
-//                                    Button(action: {
-////                                        viewModel.newExpense.type = type as! String
-////                                        viewModel.updateNewExpense()
-//                                        selectedType = type
-//                                        viewModel.newExpense.type = type
-//                                    }) {
-//                                        Text(type)
-//                                    }.buttonStyle(PlainButtonStyle())
-//                                }
-//                                
-//                                
-//                            } label: {
-//                                // Display the current selection
-//                                Text(selectedType ?? "Select Type of Payment")
-//                                    .foregroundColor(selectedType?.isEmpty == false ? .primary:.gray)
-//                            }.onAppear{
-//                                selectedType = viewModel.newExpense.type;
-//                            }
-//                        }
+
                         HStack {
                             Spacer()
                             Button(action: {
@@ -137,7 +113,12 @@ struct ExpensesView: View {
                                     viewModel.loadMoreExpenses()
                                 }
                             }
-                        }.onDelete(perform: viewModel.deleteExpense)
+                        }.onDelete { offsets in
+                            offsets.forEach { index in
+                                let expenseToDelete = expenses[index]
+                                viewModel.deleteExpense(expenseToDelete: expenseToDelete)
+                            }
+                        }
                     }
                 }
             }

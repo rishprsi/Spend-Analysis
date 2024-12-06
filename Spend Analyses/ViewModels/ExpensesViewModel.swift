@@ -129,24 +129,22 @@ class ExpensesViewModel: ObservableObject {
 //        }
 //    }
     
-    func deleteExpense(at offsets: IndexSet) {
-        for index in offsets {
-            let expenseToDelete = expenses[index]
-            
-            // Remove from the data source (e.g., Core Data)
-            context.delete(expenseToDelete)
+    func deleteExpense(expenseToDelete: Expense) {
+        // Find the index in the original expenses array
+        if let index = expenses.firstIndex(where: { $0.id == expenseToDelete.id }) {
+            // Remove from the array
+            let expense = expenses.remove(at: index)
+
+            // Remove from Core Data
+            context.delete(expense)
             do {
                 try context.save()
                 print("Changes saved successfully.")
             } catch {
                 print("Failed to save changes: \(error)")
             }
-            
-            // Update the local array
-            expenses.remove(at: index)
         }
     }
-    
     @objc func saveChanges() {
             if context.hasChanges {
                 do {

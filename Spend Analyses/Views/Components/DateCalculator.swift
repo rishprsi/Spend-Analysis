@@ -28,4 +28,26 @@ struct DateCalculator {
         guard let endOfMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth)?.addingTimeInterval(-1) else { return nil }
         return (start: startOfMonth, end: endOfMonth)
     }
+    
+    static func getStartAndEndOfYear(for date: Date = Date()) -> (start: Date, end: Date)? {
+        let calendar = Calendar.current
+        guard let startOfYear = calendar.dateInterval(of: .year, for: date)?.start else { return nil }
+        guard let endOfYear = calendar.date(byAdding: .year, value: 1, to: startOfYear)?.addingTimeInterval(-1) else { return nil }
+        return (start: startOfYear, end: endOfYear)
+    }
+    
+    static func getStartAndEnd(interval:String,date:Date = Date()) -> (start: Date, end: Date)? {
+        switch interval {
+        case "Daily":
+            return DateCalculator.getStartAndEndOfDay(for: date)
+        case "Weekly":
+            return DateCalculator.getStartAndEndOfWeek(for: date)
+        case "Monthly":
+            return DateCalculator.getStartAndEndOfMonth(for: date)
+        case "Annually":
+            return DateCalculator.getStartAndEndOfYear(for: date)
+        default:
+            return DateCalculator.getStartAndEndOfDay(for: date)
+        }
+    }
 }

@@ -23,6 +23,7 @@ struct BudgetView: View {
         }()
     @StateObject private var viewModel = BudgetViewModel()
     
+    
     var body: some View {
         VStack{
             if (viewModel.newCategoryFlag){
@@ -58,7 +59,8 @@ struct BudgetView: View {
             }
             Spacer().background(.primary)
             List {
-                
+                let uncategorizedExpenses = viewModel.currentExpenses
+                    .filter{$0.category == nil}
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Total \(viewModel.budgetInterval) Budget")
@@ -80,24 +82,26 @@ struct BudgetView: View {
                     }
                     Spacer()
                 }
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Uncategorized Expenses")
-                            .font(.headline)
-                        
-                        // Calculate and display the total spent
-                        let uncategorizedExpenses = viewModel.currentExpenses
-                            .filter{$0.category == nil}
-                             
-                        Text("Count: \(uncategorizedExpenses.count, specifier: "%d")")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                        Text("Spent: \(uncategorizedExpenses.reduce(0) { $0 + $1.amount }, specifier: "%.2f")")
-                            .font(.subheadline)
-                            .foregroundColor(.red)
+                if (uncategorizedExpenses.count > 0){
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Uncategorized Expenses")
+                                .font(.headline)
+                            
+                            // Calculate and display the total spent
+                            
+                                 
+                            Text("Count: \(uncategorizedExpenses.count, specifier: "%d")")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            Text("Spent: \(uncategorizedExpenses.reduce(0) { $0 + $1.amount }, specifier: "%.2f")")
+                                .font(.subheadline)
+                                .foregroundColor(.red)
+                        }
+                        Spacer()
                     }
-                    Spacer()
                 }
+                
                 ForEach(viewModel.categories, id: \.id) { category in
                     
                     BudgetAccordionRow(
