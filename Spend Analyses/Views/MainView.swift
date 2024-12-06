@@ -10,11 +10,11 @@ struct MainView: View {
     @StateObject private var viewModel = BottomNavViewModel()
 
     var body: some View {
-        NavigationView{
+        NavigationStack{
             VStack {
                 // Display the selected view
                 viewModel.selectedTab.view
-                    .padding(.bottom, 50) // Adjust for the nav bar height
+//                    .padding(.bottom, 50) // Adjust for the nav bar height
                     .navigationTitle(viewModel.selectedTab.title)
                     .navigationBarTitleDisplayMode(.inline)
                 Spacer()

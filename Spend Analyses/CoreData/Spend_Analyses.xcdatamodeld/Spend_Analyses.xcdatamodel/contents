@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A348" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24B91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Category" representedClassName="Category" syncable="YES">
         <attribute name="budget" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -11,6 +11,7 @@
         <attribute name="backupType" optional="YES" attributeType="String"/>
         <attribute name="budgetInterval" optional="YES" attributeType="String"/>
         <attribute name="summaryInterval" optional="YES" attributeType="String"/>
+        <attribute name="totalBudget" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="visualizationInterval" optional="YES" attributeType="String"/>
         <fetchedProperty name="fetchedProperty" optional="YES">
             <fetchRequest name="fetchedPropertyFetchRequest" entity="Config"/>

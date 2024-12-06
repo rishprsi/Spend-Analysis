@@ -3,6 +3,9 @@ import CoreData
 
 struct ExpensesView: View {
     @StateObject private var viewModel = ExpensesViewModel()
+    @State private var selectedType: String?
+    @State private var selectedCategory: Category?
+//    @State private var selectedDateTime: Date = Date()
 
     private let quantityFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -19,14 +22,54 @@ struct ExpensesView: View {
             if viewModel.newExpenseFlag {
                 Form {
                     Section(header: Text("New Expense")) {
-                        TextField("Expense Name", text: $viewModel.newExpense.title).frame(maxWidth: .infinity)
-                        AutocompleteField(categories: viewModel.categories)
-                        TextField("Amount", value: $viewModel.newExpense.amount, formatter: quantityFormatter).frame(maxWidth: .infinity)
-                        TypeAutocompleteField()
+                        HStack{
+                            Text("Title").foregroundColor(.secondary)
+                            TextField("Expense", text: $viewModel.newExpense.title).multilineTextAlignment(.trailing)
+                        }
+                        HStack{
+                            Text("Amount").foregroundColor(.secondary)
+                            TextField("0.00", value: $viewModel.newExpense.amount, formatter: quantityFormatter).multilineTextAlignment(.trailing)
+                        }
+                        HStack{
+                            Text("Category").foregroundColor(.secondary)
+                            Spacer()
+                            Menu {
+                                // Define dropdown options for budget interval
+                                ForEach(viewModel.categories, id: \.id){ category in
+                                    Button(action: {
+                                        viewModel.newExpense.category = category
+                                        selectedCategory = category
+                                    }) {
+                                        Text(category.title)
+                                    }
+                                }
+                                
+                                
+                            } label: {
+                                // Display the current selection
+                                Text(selectedCategory?.title ?? "Select Category")
+                                    .foregroundColor(selectedCategory  != nil ? .primary:.gray)
+                            }.onAppear{
+                                selectedCategory = viewModel.newExpense.category;
+                            }
+                        }
+                        HStack{
+                            Text("Date").foregroundColor(.secondary)
+                            DatePicker(
+                                            "",
+                                            selection: $viewModel.newExpense.expenseDateTime,
+                                            displayedComponents: .date
+                                        )
+                            .datePickerStyle(DefaultDatePickerStyle()) // Use a graphical style
+
+//                            Text("Selected: \(viewModel.newExpense.wrappedExpenseDateTime, formatter: dateFormatter)")
+                                    }.multilineTextAlignment(.trailing)
+
                         HStack {
                             Spacer()
                             Button(action: {
                                 // Button action here
+                                viewModel.addExpense();
                             }) {
                                 Text("Save Expense")
                                     .foregroundColor(.white)
@@ -34,16 +77,14 @@ struct ExpensesView: View {
                                     .padding(.horizontal, 10)
                                     .background(Color.blue)
                                     .cornerRadius(25)
-                            }
+                            }.buttonStyle(PlainButtonStyle())
                         }
-                        .padding(.vertical, 2)
+                        .padding(.vertical, 2).padding(.horizontal, 0)
                     }
                 }
-                .frame(maxHeight: 300)
+                .frame(maxHeight: 310)
             }
 
-            Text("List of expenses")
-                .font(.headline)
 
             List {
                 ForEach(groupedExpenses, id: \.key) { date, expenses in
@@ -53,19 +94,29 @@ struct ExpensesView: View {
                                 VStack(alignment: .leading) {
                                     Text(expense.title)
                                         .font(.headline)
-                                    Text("Amount: \(quantityFormatter.string(from: NSNumber(value: expense.amount)) ?? "")")
+                                    Text("Amount: \(expense.amount, specifier: "%.2f")")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Text(expense.expenseDateTime ?? Date(), style: .time)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                VStack(alignment: .trailing) {
+                                    Text(expense.expenseDateTime ?? Date(), style: .time)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    
+                                    Text(expense.category?.title ?? "Uncategorized").font(.subheadline).foregroundColor(.secondary)
+                                }
+                                
                             }
                             .onAppear {
                                 if expenses.last == expense {
                                     viewModel.loadMoreExpenses()
                                 }
+                            }
+                        }.onDelete { offsets in
+                            offsets.forEach { index in
+                                let expenseToDelete = expenses[index]
+                                viewModel.deleteExpense(expenseToDelete: expenseToDelete)
                             }
                         }
                     }
@@ -80,6 +131,8 @@ struct ExpensesView: View {
                     Image(systemName: "plus")
                 }
             }
+        }.onDisappear(){
+            viewModel.cleanupInvalidEntries();
         }
     }
 

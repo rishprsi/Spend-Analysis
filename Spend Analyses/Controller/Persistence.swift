@@ -9,6 +9,8 @@
 
     struct PersistenceController {
         static let shared = PersistenceController()
+        
+        private let cache = NSCache<NSString, NSManagedObject>()
 
         @MainActor
         static let preview: PersistenceController = {
@@ -35,6 +37,10 @@
             container = NSPersistentContainer(name: "Spend_Analyses")
             if inMemory {
                 container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+            }else{
+//                Provides encryption for data stored in persistent storage
+                container.persistentStoreDescriptions.first!.setOption(FileProtectionType.complete as NSObject,
+                                                                       forKey: NSPersistentStoreFileProtectionKey)
             }
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
                 if let error = error as NSError? {
@@ -54,4 +60,17 @@
             })
             container.viewContext.automaticallyMergesChangesFromParent = true
         }
+        
+        // MARK: - Cache Management
+            func getCachedObject(forKey key: String) -> NSManagedObject? {
+                return cache.object(forKey: key as NSString)
+            }
+
+            func cacheObject(_ object: NSManagedObject, forKey key: String) {
+                cache.setObject(object, forKey: key as NSString)
+            }
+
+            func removeCachedObject(forKey key: String) {
+                cache.removeObject(forKey: key as NSString)
+            }
     }
